@@ -66,7 +66,7 @@ func handleUpdate(update tgbotapi.Update) {
 	chatID := update.Message.Chat.ID
 	chatCounters[chatID]++
 
-	if chatCounters[chatID]%10 == 0 {
+	if chatCounters[chatID]%1000 == 0 {
 		sendGif(chatID)
 	}
 }

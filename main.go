@@ -15,7 +15,7 @@ var (
 
 func main() {
 	var err error
-	bot, err = tgbotapi.NewBotAPI(os.Getenv("7843550853:AAE1Ih5G1WuEnKDPSXRj3DaOLB6y8-mhBF8"))
+	bot, err = tgbotapi.NewBotAPI(("7843550853:AAE1Ih5G1WuEnKDPSXRj3DaOLB6y8-mhBF8"))
 	if err != nil {
 		log.Panic(err)
 	}
@@ -24,7 +24,7 @@ func main() {
 	log.Printf("Бот запущен: %s", bot.Self.UserName)
 
 	// Устанавливаем вебхук
-	webhookURL := "https://dashboard.render.com/web/srv-d0upb4k9c44c73bl5p1g/webhook"
+	webhookURL := "https://Osanai.onrender.com/webhook"
 	wh, err := tgbotapi.NewWebhook(webhookURL)
 	if err != nil {
 		log.Fatalf("Ошибка создания webhook: %v", err)

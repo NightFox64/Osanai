@@ -105,8 +105,8 @@ func handleCommand(msg *tgbotapi.Message) {
 		chatSettings[chatID] = settings
 
 		sendMessage(chatID, fmt.Sprintf("Теперь гифка будет отправляться каждые %d сообщений", newTrigger))
-	default:
-		sendMessage(chatID, "Доступные команды:\n/settrigger <число> - установить количество сообщений для гифки")
+		// default:
+		// 	sendMessage(chatID, "Доступные команды:\n/settrigger <число> - установить количество сообщений для гифки")
 	}
 }
 

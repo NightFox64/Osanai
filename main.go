@@ -137,8 +137,8 @@ func handleCommand(msg *tgbotapi.Message) {
 		}
 		sendMessage(chatID, fmt.Sprintf("Текущее значение: %d сообщений", triggerNum))
 
-	default:
-		sendMessage(chatID, "Доступные команды:\n/settrigger <число> - установить триггер\n/currenttrigger - показать текущее значение")
+		// default:
+		// 	sendMessage(chatID, "Доступные команды:\n/settrigger <число> - установить триггер\n/currenttrigger - показать текущее значение")
 	}
 }
 

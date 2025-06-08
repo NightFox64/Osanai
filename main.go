@@ -14,7 +14,7 @@ var (
 	bot          *tgbotapi.BotAPI
 	chatSettings = make(map[int64]struct {
 		Counter    int
-		TriggerNum int // Количество сообщений для триггера
+		TriggerNum int
 	})
 )
 
@@ -65,15 +65,7 @@ func handleUpdate(update tgbotapi.Update) {
 	}
 
 	// Инициализация настроек чата, если их еще нет
-	if _, exists := chatSettings[update.Message.Chat.ID]; !exists {
-		chatSettings[update.Message.Chat.ID] = struct {
-			Counter    int
-			TriggerNum int
-		}{
-			Counter:    0,
-			TriggerNum: 10, // Значение по умолчанию
-		}
-	}
+	initChatSettings(update.Message.Chat.ID)
 
 	// Обработка команд
 	if update.Message.IsCommand() {
@@ -85,6 +77,18 @@ func handleUpdate(update tgbotapi.Update) {
 	handleRegularMessage(update.Message)
 }
 
+func initChatSettings(chatID int64) {
+	if _, exists := chatSettings[chatID]; !exists {
+		chatSettings[chatID] = struct {
+			Counter    int
+			TriggerNum int
+		}{
+			Counter:    0,
+			TriggerNum: 10, // Значение по умолчанию
+		}
+	}
+}
+
 func handleCommand(msg *tgbotapi.Message) {
 	chatID := msg.Chat.ID
 	command := msg.Command()
@@ -92,22 +96,31 @@ func handleCommand(msg *tgbotapi.Message) {
 
 	switch command {
 	case "settrigger":
-		// Команда для изменения количества сообщений
-		newTrigger, err := strconv.Atoi(args)
-		if err != nil || newTrigger <= 0 {
-			sendMessage(chatID, "Используйте: /settrigger <число> (например: /settrigger 5)")
-			return
-		}
-
-		// Обновляем настройки
-		settings := chatSettings[chatID]
-		settings.TriggerNum = newTrigger
-		chatSettings[chatID] = settings
-
-		sendMessage(chatID, fmt.Sprintf("Теперь гифка будет отправляться каждые %d сообщений", newTrigger))
+		handleSetTrigger(chatID, args)
+	case "currenttrigger":
+		handleCurrentTrigger(chatID)
 		// default:
-		// 	sendMessage(chatID, "Доступные команды:\n/settrigger <число> - установить количество сообщений для гифки")
+		// 	sendMessage(chatID, "Доступные команды:\n/settrigger <число> - установить количество сообщений\n/currenttrigger - показать текущее значение")
 	}
+}
+
+func handleSetTrigger(chatID int64, args string) {
+	newTrigger, err := strconv.Atoi(args)
+	if err != nil || newTrigger <= 0 {
+		sendMessage(chatID, "Используйте: /settrigger <число> (например: /settrigger 5)")
+		return
+	}
+
+	settings := chatSettings[chatID]
+	settings.TriggerNum = newTrigger
+	chatSettings[chatID] = settings
+
+	sendMessage(chatID, fmt.Sprintf("Установлено новое значение: гифка будет отправляться каждые %d сообщений", newTrigger))
+}
+
+func handleCurrentTrigger(chatID int64) {
+	settings := chatSettings[chatID]
+	sendMessage(chatID, fmt.Sprintf("Текущее значение: гифка отправляется каждые %d сообщений", settings.TriggerNum))
 }
 
 func handleRegularMessage(msg *tgbotapi.Message) {
@@ -116,10 +129,9 @@ func handleRegularMessage(msg *tgbotapi.Message) {
 	settings.Counter++
 	chatSettings[chatID] = settings
 
-	// Проверяем, нужно ли отправлять гифку
 	if settings.Counter >= settings.TriggerNum {
 		sendGif(chatID)
-		settings.Counter = 0 // Сбрасываем счетчик
+		settings.Counter = 0
 		chatSettings[chatID] = settings
 	}
 }

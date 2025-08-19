@@ -1,0 +1,3 @@
+BotAPT "7843550853:AAE1Ih5G1WuEnKDPSXRj3DaOLB6y8-mhBF8"
+webhook "https://Osanai.onrender.com/webhook"
+FileID "CgACAgIAAxkBAAMDaD2NxM7H1-jBWRjBHYxlIxNOWIkAAr5zAAKrXvBJaM6laThye-g2BA"

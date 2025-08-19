@@ -33,7 +33,11 @@ var bot *tgbotapi.BotAPI
 
 func main() {
 	// Инициализация бота
-	token := "7843550853:AAE1Ih5G1WuEnKDPSXRj3DaOLB6y8-mhBF8" // Замените на ваш токен
+	token := os.Getenv("TELEGRAM_BOT_TOKEN")
+	if token == "" {
+		// Аварийно завершаем работу, если токен не задан
+		log.Panic("Ошибка: Переменная окружения TELEGRAM_BOT_TOKEN не установлена")
+	}
 	var err error
 
 	bot, err = tgbotapi.NewBotAPI(token)

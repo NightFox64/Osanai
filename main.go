@@ -342,11 +342,11 @@ func handleResetCommand(message *tgbotapi.Message, botData *BotData) {
 
 func sendGif(chatID int64, gifID string) {
 	gif := tgbotapi.NewAnimation(chatID, tgbotapi.FileID(gifID))
-	gif.Caption = "🎉 Достигнут порог сообщений!"
+	gif.Caption = "Всё прошло по моему плану!"
 
 	if _, err := bot.Send(gif); err != nil {
 		log.Printf("Ошибка отправки гифки в чат %d: %v", chatID, err)
-		sendMessage(chatID, "🎉 Достигнут порог сообщений! (Не удалось отправить гифку)")
+		sendMessage(chatID, "Всё прошло по моему плану! (Не удалось отправить гифку)")
 	}
 }
 
